@@ -7,7 +7,7 @@ res.send("Welcome to UCF")
 }) 
 
 
-const port = process.env.port||8081
+const port = process.env.PORT||8081
 app.listen(port,()=>{
     console.log("Server Running...")
 });
