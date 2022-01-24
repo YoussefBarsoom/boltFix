@@ -3,7 +3,7 @@ const app = express()
 
 
 app.get('/',(req,res)=>{
-res.send("Welcome to UCF")
+    res.sendFile(__dirname + '/views/signUpPage.html');
 }) 
 
 
