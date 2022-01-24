@@ -24,7 +24,7 @@ app.get('/',(req,res)=>{
 
 app.post('/signUpProcess', function(req, res){ // Specifies which URL to listen for
     // req.body -- contains form data
-console.log(req.body.firstNmeInput+" ");
+console.log(req.body.firstNameInput+" ");
 });
 
 
