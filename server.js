@@ -1,6 +1,7 @@
 const express= require('express')
 const app = express()
 
+
 var mysql=require('mysql');
  var connection=mysql.createConnection({
    host:process.env.HOST_NAME,
@@ -17,6 +18,14 @@ connection.connect(function(error){
    }
  });  
 module.exports = connection; 
+
+app.use(
+    express.urlencoded({
+      extended: true
+    })
+  )
+
+  app.use(express.json())
 app.get('/',(req,res)=>{
     res.sendFile(__dirname + '/views/signUpPage.html');
 }) 
@@ -24,7 +33,7 @@ app.get('/',(req,res)=>{
 
 app.post('/signUpProcess', function(req, res){ // Specifies which URL to listen for
     // req.body -- contains form data
-console.log(req.body.firstNameInput+" ");
+console.log(req.body+" ");
 });
 
 
