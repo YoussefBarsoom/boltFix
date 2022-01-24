@@ -6,6 +6,7 @@ var mysql=require('mysql');
    host:process.env.HOST_NAME,
    user:process.env.DB_USERNAME,
    password:process.env.USER_PASSWORD,
+   port:process.env.DB_PORT,
    database:process.env.DB_NAME
  });
 connection.connect(function(error){
