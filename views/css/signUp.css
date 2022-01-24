@@ -1,0 +1,18 @@
+html,body {
+    margin:0px;
+    height:100%;
+  }
+
+
+.backgroundPage{
+    height: 100%;
+    width: 100%;
+    background-color: violet;
+}
+
+.bodyForm{
+    background-color: white ;
+    padding: 20px;
+    width: auto;
+    border-radius: 5px;
+}

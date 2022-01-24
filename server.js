@@ -22,6 +22,12 @@ app.get('/',(req,res)=>{
 }) 
 
 
+app.post('/signUpProcess', function(req, res){ // Specifies which URL to listen for
+    // req.body -- contains form data
+console.log(req.body);
+});
+
+
 const port = process.env.PORT||8081
 app.listen(port,()=>{
     console.log("Server Running...")
