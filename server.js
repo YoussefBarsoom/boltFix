@@ -24,8 +24,10 @@ app.use(
       extended: true
     })
   )
-
   app.use(express.json())
+
+
+
 app.get('/',(req,res)=>{
     res.sendFile(__dirname + '/views/signUpPage.html');
 }) 
@@ -33,7 +35,7 @@ app.get('/',(req,res)=>{
 
 app.post('/signUpProcess', function(req, res){ // Specifies which URL to listen for
     // req.body -- contains form data
-console.log(req.body+" ");
+console.log(req.body[0]+" ");
 });
 
 
