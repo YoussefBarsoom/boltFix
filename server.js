@@ -2,22 +2,25 @@ const express= require('express')
 const app = express()
 const path=require('path')
 
-var mysql=require('mysql');
- var connection=mysql.createConnection({
-   host:process.env.HOST_NAME,
-   user:process.env.DB_USERNAME,
-   password:process.env.USER_PASSWORD,
-   port:process.env.DB_PORT,
-   database:process.env.DB_NAME
- });
-connection.connect(function(error){
-   if(!!error){
-     console.log(error);
-   }else{
-     console.log('Connected!:)');
-   }
- });  
-module.exports = connection; 
+// var mysql=require('mysql');
+//  var connection=mysql.createConnection({
+//    host:process.env.HOST_NAME,
+//    user:process.env.DB_USERNAME,
+//    password:process.env.USER_PASSWORD,
+//    port:process.env.DB_PORT,
+//    database:process.env.DB_NAME
+//  });
+// connection.connect(function(error){
+//    if(!!error){
+//      console.log(error);
+//    }else{
+//      console.log('Connected!:)');
+//    }
+//  });  
+//module.exports = connection; 
+app.set('view engine','ejs')
+app.set('views',path.join(__dirname,'views'))
+app.use(express.static(__dirname));
 
 app.use(
     express.urlencoded({
@@ -27,7 +30,6 @@ app.use(
 app.use(express.json())
 
 
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.set("view engine", "ejs");
 app.get('/',(req,res)=>{
