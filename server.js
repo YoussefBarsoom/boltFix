@@ -1,6 +1,5 @@
 const express= require('express')
 const app = express()
-
 const path=require('path')
 
 var mysql=require('mysql');
@@ -28,7 +27,8 @@ app.use(
 app.use(express.json())
 
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.set("view engine", "ejs");
 app.get('/',(req,res)=>{
     res.sendFile(__dirname + '/views/signUpPage.html');
@@ -42,8 +42,10 @@ app.post('/signUpProcess', function(req, res){ // Specifies which URL to listen 
       if (err) throw err;
       console.log("1 record inserted");
     });
-console.log(JSON.stringify(req.body)+" ");
+    console.log(JSON.stringify(req.body)+" ");
 });
+
+
 
 const port = process.env.PORT||8081
 app.listen(port,()=>{
