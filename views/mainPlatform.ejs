@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="/public/css/mainStyleSheet.css">
+
+</head>
+
+<body>
+    <header class="header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix" class="headerLogo">
+    </header>
+    <main>
+        <section class="thumbSection">
+            <h2 class="thumbTitle">Popular Now</h2>
+            <div class="thumbTiles swiper-container">
+                
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    <!-- Slides -->
+                  
+                   
+                    
+                    <% for(var i=0;i<10;i++){ %> 
+                        <div class="swiper-slide">
+                            <a class="thumbTile" href="#">
+                                <div class="cardStyle">
+                                    <p class="cardTitle">aa <%= lists.eventTitle%></p>
+                                <img class="thumbTile__image"
+                                    src="<%= lists["eventImage"] %>" 
+                                    >
+                            </div>
+    
+                            </a>
+                        </div>    
+                        <% } %>                 
+                    </div>        
+                    <!-- If we need navigation buttons -->
+        <div class="block-test">
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+                               
+                </div>
+      
+                <!-- If we need navigation buttons -->
+    <div class="block-test">
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    </div>
+         
+            </div>
+          
+
+        </section>
+    </main>
+
+    <script>
+        var mySwiper = new Swiper('.swiper-container', {
+            // Optional parameters
+            spaceBetween: 5,
+            slidesPerView: 2,
+            loop: true,
+            freeMode: true,
+            loopAdditionalSlides: 5,
+            speed: 500,
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                // when window width is >= 640px
+                640: {
+                    slidesPerView: 5,
+                    slidesPerGroup: 5,
+                    freeMode: false
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
