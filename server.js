@@ -36,8 +36,8 @@ app.get('/SignUp',(req,res)=>{
     res.render('signUpPage');
 }) 
 app.get('/',(req,res)=>{
-  var JSONobject = { "Popular":[{ "eventTitle":"Breaking Bad", "eventImage":"https://occ-0-1433-1432.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABUjsKDiaKwLmrV662pwmVKEtRmbJI-s8M9ojCqr2QEdnPUJPX86RP-n9IGXxGcaHWkTf-cwz5e4kBLN3jYLM7HuBfYA.webp?r=01d"  }],
-                      "New":[{ "eventTitle":"Breaking Bad New", "eventImage":"https://occ-0-1433-1432.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABUjsKDiaKwLmrV662pwmVKEtRmbJI-s8M9ojCqr2QEdnPUJPX86RP-n9IGXxGcaHWkTf-cwz5e4kBLN3jYLM7HuBfYA.webp?r=01d"  }]
+  var JSONobject = { "Popular":[{ "eventTitle":"Breaking Bad", "eventImage":"https://occ-0-1433-1432.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABUjsKDiaKwLmrV662pwmVKEtRmbJI-s8M9ojCqr2QEdnPUJPX86RP-n9IGXxGcaHWkTf-cwz5e4kBLN3jYLM7HuBfYA.webp?r=01d"  }]
+                      // "New":[{ "eventTitle":"Breaking Bad New", "eventImage":"https://occ-0-1433-1432.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABUjsKDiaKwLmrV662pwmVKEtRmbJI-s8M9ojCqr2QEdnPUJPX86RP-n9IGXxGcaHWkTf-cwz5e4kBLN3jYLM7HuBfYA.webp?r=01d"  }]
         } 
   
  // const s = JSON.parse(JSONobject)
@@ -94,8 +94,11 @@ arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.event
         arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink  })
         curCat=element.categoryID;
       }
-    });
     
+    });
+
+    returnObject[curCat] = arrayOFEvents;
+
 
   });
 

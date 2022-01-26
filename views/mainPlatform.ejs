@@ -15,7 +15,7 @@
     <header class="header">
         <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix" class="headerLogo">
     </header>
-    <main>
+    <body>
 
         <% for (const items in lists) { %> 
         <section class="thumbSection">
@@ -23,13 +23,10 @@
             <div class="thumbTiles swiper-container">
                 
                 <!-- Additional required wrapper -->
-               
 
                 <div class="swiper-wrapper">
                     <!-- Slides -->
                   
-                   
-                    
                     <% for(var i=0;i<10;i++){ %> 
                         <div class="swiper-slide">
                             <a class="thumbTile" href="#">
@@ -59,7 +56,7 @@
 
         </section>
         <%}%>
-    </main>
+    </body>
 
     <script>
         var mySwiper = new Swiper('.swiper-container', {
@@ -67,7 +64,7 @@
             spaceBetween: 5,
             slidesPerView: 2,
             loop: true,
-            freeMode: false,
+            freeMode: true,
             loopAdditionalSlides: 5,
             speed: 600,
             // Navigation arrows
