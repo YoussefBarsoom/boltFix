@@ -44,7 +44,7 @@ app.get('/',(req,res)=>{
 // const d = s.array()
 JSONobject={};
  JSONobject = getVideos();
- return res.status(422).jsonp(s.eventTitle);
+ return res.status(422).jsonp(JSONobject);
 
      res.render('mainPlatform',{ lists:JSONobject});
 }) 
