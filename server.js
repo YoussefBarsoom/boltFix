@@ -83,8 +83,13 @@ function getVideos (){
   var returnObject ={}
   var arrayOFEvents =[]
   connection.query(sql, function (err, result) {
+    console.log(JSON.stringify(result))
     var curCat = result[0].categoryID
+    console.log(curCat)
+
     result.forEach(element => {
+      console.log(element)
+
       if(curCat == element.categoryID)
       {
 arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink  })
