@@ -16,11 +16,15 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix" class="headerLogo">
     </header>
     <main>
+
+        <% for (const items in lists) { %> 
         <section class="thumbSection">
-            <h2 class="thumbTitle">Popular Now</h2>
+            <h2 class="thumbTitle"><%=items%></h2>
             <div class="thumbTiles swiper-container">
                 
                 <!-- Additional required wrapper -->
+               
+
                 <div class="swiper-wrapper">
                     <!-- Slides -->
                   
@@ -30,9 +34,9 @@
                         <div class="swiper-slide">
                             <a class="thumbTile" href="#">
                                 <div class="cardStyle">
-                                    <p class="cardTitle">aa <%= lists.eventTitle%></p>
+                                    <p class="cardTitle"> <%= lists[items][0].eventTitle+i%></p>
                                 <img class="thumbTile__image"
-                                    src="<%= lists["eventImage"] %>" 
+                                    src="<%= lists[items][0]["eventImage"] %>" 
                                     >
                             </div>
     
@@ -48,15 +52,13 @@
                 </div>
       
                 <!-- If we need navigation buttons -->
-    <div class="block-test">
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-    </div>
+
          
             </div>
           
 
         </section>
+        <%}%>
     </main>
 
     <script>
@@ -67,7 +69,7 @@
             loop: true,
             freeMode: true,
             loopAdditionalSlides: 5,
-            speed: 500,
+            speed: 600,
             // Navigation arrows
             navigation: {
                 nextEl: '.swiper-button-next',
