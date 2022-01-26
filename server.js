@@ -36,19 +36,15 @@ app.get('/SignUp',(req,res)=>{
     res.render('signUpPage');
 }) 
 app.get('/',(req,res)=>{
-  const JSONobject = { "Popular":[{ "eventTitle":"Breaking Bad", "eventImage":"https://occ-0-1433-1432.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABUjsKDiaKwLmrV662pwmVKEtRmbJI-s8M9ojCqr2QEdnPUJPX86RP-n9IGXxGcaHWkTf-cwz5e4kBLN3jYLM7HuBfYA.webp?r=01d"  }],
+  var JSONobject = { "Popular":[{ "eventTitle":"Breaking Bad", "eventImage":"https://occ-0-1433-1432.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABUjsKDiaKwLmrV662pwmVKEtRmbJI-s8M9ojCqr2QEdnPUJPX86RP-n9IGXxGcaHWkTf-cwz5e4kBLN3jYLM7HuBfYA.webp?r=01d"  }],
                       "New":[{ "eventTitle":"Breaking Bad New", "eventImage":"https://occ-0-1433-1432.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABUjsKDiaKwLmrV662pwmVKEtRmbJI-s8M9ojCqr2QEdnPUJPX86RP-n9IGXxGcaHWkTf-cwz5e4kBLN3jYLM7HuBfYA.webp?r=01d"  }]
         } 
   
  // const s = JSON.parse(JSONobject)
  // return res.status(422).jsonp(s.eventTitle);
 // const d = s.array()
-var sql = "SELECT * FROM CREATOR_EVENTS GROUP BY event;";
-connection.query(sql, function (err, result) {
-  if (err) throw err;
-  console.log("1 record inserted");
-});
-    res.render('mainPlatform',{ lists:JSONobject});
+ JSONobject = getVideos();
+     res.render('mainPlatform',{ lists:JSONobject});
 }) 
 
 app.post('/signUpProcess',[
