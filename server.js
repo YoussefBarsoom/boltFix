@@ -83,25 +83,24 @@ function getVideos (){
   var returnObject ={}
   var arrayOFEvents =[]
   connection.query(sql, function (err, result) {
-    console.log(JSON.stringify(result))
+    var results= JSON.parse(JSON.stringify(result))
     var curCat = result[0].categoryID
-    console.log(curCat)
 
-    result.forEach(element => {
+    results.forEach(element => {
       console.log("ROw"+element);
 
-      console.log("ROw11"+element[0]);
+      console.log("ROw11"+element);
 
-      if(curCat == element[0].categoryID)
+      if(curCat == element.categoryID)
       {
-arrayOFEvents.push({ "eventTitle": element[0].eventName, "eventImage":element[0].eventImageLink  })
+arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink  })
 console.log("Array"+ arrayOFEvents)
       }
       else
       {
         returnObject[curCat] = arrayOFEvents;
         arrayOFEvents=[];
-        arrayOFEvents.push({ "eventTitle": element[0].eventName, "eventImage":element[0].eventImageLink  })
+        arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink  })
         curCat=element.categoryID;
       }
     
