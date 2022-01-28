@@ -2,6 +2,7 @@ const express= require('express')
 const app = express()
 const path=require('path')
 const bodyParser = require('body-parser')
+require('dotenv').config()
 const {check,validationResult}=require('express-validator')
 var mysql=require('mysql');
  var connection=mysql.createConnection({
@@ -30,23 +31,129 @@ app.use(
   )
 app.use(express.json())
 
+app.post('/login',(req,res)=>{
+  res.render('loginPage');
+}) 
+app.post('/loginProcess',[
+  check('passwordInput','Password is Empty').exists(),
+  check('emailInput','Email is invalid').isEmail().normalizeEmail()
+], function(req, res){ // Specifies which URL to listen for
+    // req.body -- contains form data
 
+    const error= validationResult(req)
+    const alert = error.array()
 
-app.get('/SignUp',(req,res)=>{
+    if(!error.isEmpty())
+    {
+      res.render('loginPage',{
+        alert
+      })
+    }
+    else{
+
+    
+    var object = req.body;
+    var sql = "Select userId from USERS where email='"+object.emailInput+"'AND userPassword='"+object.passwordInput+"'";
+    connection.query(sql, function (err, result) {
+      if (err) throw err;
+        console.log(result); 
+      if(result[0])
+      {
+     res.redirect("/?user="+ result[0]["userId"]);
+      }
+      else
+      {
+        const dalert =         [ {"msg":"Incorrect Email or Password. Please try again."}]
+
+        res.render('loginPage',
+       {alert: dalert}
+        )
+      }
+    });
+  }
+});
+app.post('/SignUp',(req,res)=>{
     res.render('signUpPage');
 }) 
 app.get('/',(req,res)=>{
-  var JSONobject = { "Popular":[{ "eventTitle":"Breaking Bad", "eventImage":"https://occ-0-1433-1432.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABUjsKDiaKwLmrV662pwmVKEtRmbJI-s8M9ojCqr2QEdnPUJPX86RP-n9IGXxGcaHWkTf-cwz5e4kBLN3jYLM7HuBfYA.webp?r=01d"  }]
-                      // "New":[{ "eventTitle":"Breaking Bad New", "eventImage":"https://occ-0-1433-1432.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABUjsKDiaKwLmrV662pwmVKEtRmbJI-s8M9ojCqr2QEdnPUJPX86RP-n9IGXxGcaHWkTf-cwz5e4kBLN3jYLM7HuBfYA.webp?r=01d"  }]
-        } 
-  
+  if(req.query.user)
+  {
+    console.log("HII i am user"+req.query.user);
+  }
+  var trendSQL = "Select * from CREATOR_EVENT ORDER BY ratingCount DESC LIMIT 10;";
  // const s = JSON.parse(JSONobject)
 // const d = s.array()
-JSONobject={};
- JSONobject = getVideos();
- return res.status(422).jsonp(JSONobject);
+ var sql = "SELECT e.eventId,c.categoryName,c.categoryID,e.eventName,e.eventLink,e.eventImageLink,e.eventdate,eventDescrip,ticketPrice,ratingCount FROM CREATOR_EVENT e INNER JOIN VIDEO_CAT c on e.categoryID=c.categoryID ORDER BY e.categoryID;";
+  var returnObject ={}
+  var arrayOFEvents =[]
 
-     res.render('mainPlatform',{ lists:JSONobject});
+  connection.query(trendSQL, function (err, result) {
+    var results= JSON.parse(JSON.stringify(result))
+    var dat ,time,eventTime=''
+    results.forEach(element => {
+        //NOTE SAVE DATE AS UTC
+         dat=element.eventdate;
+        dat =new Date(dat).toLocaleString('en', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        });
+         time=new Date(dat).toLocaleTimeString();
+        eventTime= time
+arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat  })
+
+});
+returnObject["Popular"] = arrayOFEvents;
+console.log(returnObject["Popular"]);
+arrayOFEvents =[]
+});
+
+  connection.query(sql, function (err, result) {
+    var results= JSON.parse(JSON.stringify(result))
+    var curCat = result[0].categoryName
+    var dat ,time,eventTime=''
+    results.forEach(element => {
+
+
+      if(curCat == element.categoryName)
+      {
+        //NOTE SAVE DATE AS UTC
+         dat=element.eventdate;
+        dat =new Date(dat).toLocaleString('en', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        });
+         time=new Date(dat).toLocaleTimeString();
+        eventTime= time
+arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat  })
+console.log( arrayOFEvents)
+      }
+      else
+      {
+        returnObject[curCat] = arrayOFEvents;
+        arrayOFEvents=[];
+         dat=element.eventdate;
+        dat =new Date(dat).toLocaleString('en', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        });
+         time=new Date(dat).toLocaleTimeString();
+        eventTime= time
+arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat  })
+        curCat=element.categoryName;
+      }
+    
+    });
+
+    returnObject[curCat] = arrayOFEvents;
+
+    res.render('mainPlatform',{ lists:returnObject ,userName:req.query.user});
+
+  });
+
+
 }) 
 
 app.post('/signUpProcess',[
@@ -84,30 +191,27 @@ function getVideos (){
   var arrayOFEvents =[]
   connection.query(sql, function (err, result) {
     var results= JSON.parse(JSON.stringify(result))
-    var curCat = result[0].categoryID
+    var curCat = result[0].categoryName
 
     results.forEach(element => {
-      console.log("ROw"+element);
 
-      console.log("ROw11"+element);
 
-      if(curCat == element.categoryID)
+      if(curCat == element.categoryName)
       {
 arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink  })
-console.log("Array"+ arrayOFEvents)
+console.log( arrayOFEvents)
       }
       else
       {
         returnObject[curCat] = arrayOFEvents;
         arrayOFEvents=[];
         arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink  })
-        curCat=element.categoryID;
+        curCat=element.categoryName;
       }
     
     });
 
     returnObject[curCat] = arrayOFEvents;
-
 
   });
 
