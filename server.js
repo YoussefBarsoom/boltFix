@@ -98,13 +98,13 @@ app.get('/',(req,res)=>{
           day: 'numeric',
           year: 'numeric',
         });
-         time=new Date(dat).toLocaleTimeString();
-        eventTime= time
+        console.log(element.eventdate)
+         time= element.eventdate.split("T");
+        eventTime= time[1].replace('Z','')+ "(GMT)"
 arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat  })
 
 });
 returnObject["Popular"] = arrayOFEvents;
-console.log(returnObject["Popular"]);
 arrayOFEvents =[]
 });
 
@@ -179,7 +179,8 @@ app.post('/signUpProcess',[
     var sql = "insert into USERS(firstname,lastname,email,userPassword,userTypeID) Values ('"+object.firstNmeInput+"','"+object.lastNmeInput+"','"+object.emailInput+"','"+object.passwordInput+"',1)";
     connection.query(sql, function (err, result) {
       if (err) throw err;
-      console.log("1 record inserted");
+      res.redirect("/?user="+object.firstNmeInput +" "+ object.lastNmeInput);
+
     });
     console.log(JSON.stringify(req.body)+" ");
   }
