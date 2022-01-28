@@ -53,13 +53,13 @@ app.post('/loginProcess',[
 
     
     var object = req.body;
-    var sql = "Select userId from USERS where email='"+object.emailInput+"'AND userPassword='"+object.passwordInput+"'";
+    var sql = "Select firstname,lastname from USERS where email='"+object.emailInput+"'AND userPassword='"+object.passwordInput+"'";
     connection.query(sql, function (err, result) {
       if (err) throw err;
         console.log(result); 
       if(result[0])
       {
-     res.redirect("/?user="+ result[0]["userId"]);
+     res.redirect("/?user="+ result[0]["firstname"] +" "+ result[0]["lastname"]);
       }
       else
       {
