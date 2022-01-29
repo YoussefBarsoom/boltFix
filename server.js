@@ -101,7 +101,7 @@ app.get('/',(req,res)=>{
         console.log(element.eventdate)
          time= element.eventdate.split("T");
         eventTime= time[1].replace('Z','')+ "(GMT)"
-arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat  })
+arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount })
 
 });
 returnObject["Popular"] = arrayOFEvents;
@@ -126,7 +126,7 @@ arrayOFEvents =[]
         });
          time=new Date(dat).toLocaleTimeString();
         eventTime= time
-arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat  })
+arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount  })
 console.log( arrayOFEvents)
       }
       else
@@ -141,7 +141,7 @@ console.log( arrayOFEvents)
         });
          time=new Date(dat).toLocaleTimeString();
         eventTime= time
-arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat  })
+arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount  })
         curCat=element.categoryName;
       }
     
