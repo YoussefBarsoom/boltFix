@@ -9,9 +9,9 @@ var mysql=require('mysql');
    host:process.env.HOST_NAME,
    user:process.env.DB_USERNAME,
    password:process.env.USER_PASSWORD,
-   port:process.env.DB_PORT,
    database:process.env.DB_NAME
  });
+
 connection.connect(function(error){
    if(!!error){
      console.log(error);
@@ -24,6 +24,9 @@ app.set('view engine','ejs')
 app.set('views',path.join(__dirname,'views'))
 app.use(express.static(__dirname));
 
+app.get('/test',(req,res)=>{
+  res.send("HOLAAA")
+})
 app.use(
     express.urlencoded({
       extended: true
@@ -51,7 +54,6 @@ app.post('/loginProcess',[
     }
     else{
 
-    
     var object = req.body;
     var sql = "Select firstname,lastname from USERS where email='"+object.emailInput+"'AND userPassword='"+object.passwordInput+"'";
     connection.query(sql, function (err, result) {
@@ -63,16 +65,15 @@ app.post('/loginProcess',[
       }
       else
       {
-        const dalert =         [ {"msg":"Incorrect Email or Password. Please try again."}]
+        const dalert = [ {"msg":"Incorrect Email or Password. Please try again."}]
 
         res.render('loginPage',
-       {alert: dalert}
-        )
+      {alert: dalert})
       }
     });
   }
 });
-app.post('/SignUp',(req,res)=>{
+app.get('/SignUp',(req,res)=>{
     res.render('signUpPage');
 }) 
 app.get('/',(req,res)=>{
@@ -80,9 +81,7 @@ app.get('/',(req,res)=>{
   {
     console.log("HII i am user"+req.query.user);
   }
-  var trendSQL = "Select * from CREATOR_EVENT ORDER BY ratingCount DESC LIMIT 10;";
- // const s = JSON.parse(JSONobject)
-// const d = s.array()
+  //var trendSQL = "Select * from CREATOR_EVENT ORDER BY ratingCount DESC LIMIT 10;";
  var sql = "SELECT e.eventId,c.categoryName,c.categoryID,e.eventName,e.eventLink,e.eventImageLink,e.eventdate,eventDescrip,ticketPrice,ratingCount FROM CREATOR_EVENT e INNER JOIN VIDEO_CAT c on e.categoryID=c.categoryID ORDER BY e.categoryID;";
   var returnObject ={}
   var arrayOFEvents =[]
@@ -101,8 +100,7 @@ app.get('/',(req,res)=>{
         console.log(element.eventdate)
          time= element.eventdate.split("T");
         eventTime= time[1].replace('Z','')+ "(GMT)"
-arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount })
-
+    arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount })
 });
 returnObject["Popular"] = arrayOFEvents;
 arrayOFEvents =[]
@@ -113,7 +111,6 @@ arrayOFEvents =[]
     var curCat = result[0].categoryName
     var dat ,time,eventTime=''
     results.forEach(element => {
-
 
       if(curCat == element.categoryName)
       {
@@ -126,8 +123,8 @@ arrayOFEvents =[]
         });
          time=new Date(dat).toLocaleTimeString();
         eventTime= time
-arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount  })
-console.log( arrayOFEvents)
+        arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount  })
+        console.log( arrayOFEvents)
       }
       else
       {
@@ -176,7 +173,7 @@ app.post('/signUpProcess',[
 
     
     var object = req.body;
-    var sql = "insert into USERS(firstname,lastname,email,userPassword,userTypeID) Values ('"+object.firstNmeInput+"','"+object.lastNmeInput+"','"+object.emailInput+"','"+object.passwordInput+"',1)";
+    var sql = "insert into users(firstname,lastname,email,userPassword,userType) Values ('"+object.firstNmeInput+"','"+object.lastNmeInput+"','"+object.emailInput+"','"+object.passwordInput+"',24)";
     connection.query(sql, function (err, result) {
       if (err) throw err;
       res.redirect("/?user="+object.firstNmeInput +" "+ object.lastNmeInput);
@@ -219,7 +216,7 @@ console.log( arrayOFEvents)
   return returnObject;
 }
 
-const port = process.env.PORT||8081
+const port = process.env.PORT||3000
 app.listen(port,()=>{
     console.log("Server Running...")
 });
