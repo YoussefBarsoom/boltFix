@@ -55,13 +55,13 @@ app.post('/loginProcess',[
     else{
 
     var object = req.body;
-    var sql = "Select firstname,lastname from USERS where email='"+object.emailInput+"'AND userPassword='"+object.passwordInput+"'";
+    var sql = "Select firstname,lastname,userID from USERS where email='"+object.emailInput+"'AND userPassword='"+object.passwordInput+"'";
     connection.query(sql, function (err, result) {
       if (err) throw err;
         console.log(result); 
       if(result[0])
       {
-     res.redirect("/?user="+ result[0]["firstname"] +" "+ result[0]["lastname"]);
+     res.redirect("/?user="+ result[0]["firstname"] +" "+ result[0]["lastname"]+" "+result[0]["userID"]);
       }
       else
       {
@@ -73,20 +73,25 @@ app.post('/loginProcess',[
     });
   }
 });
-app.get('/SignUp',(req,res)=>{
+app.post('/SignUp',(req,res)=>{
     res.render('signUpPage');
 }) 
 app.get('/',(req,res)=>{
   if(req.query.user)
   {
-    console.log("HII i am user"+req.query.user);
+  
   }
+
   //var trendSQL = "Select * from CREATOR_EVENT ORDER BY ratingCount DESC LIMIT 10;";
- var sql = "SELECT e.eventId,c.categoryName,c.categoryID,e.eventName,e.eventLink,e.eventImageLink,e.eventdate,eventDescrip,ticketPrice,ratingCount FROM CREATOR_EVENT e INNER JOIN VIDEO_CAT c on e.categoryID=c.categoryID ORDER BY e.categoryID;";
-  var returnObject ={}
+  //Public
+ var publicSql = "SELECT e.eventId,e.eventName,e.eventdate,e.eventTime,e.eventDescrip FROM uniEvents e where eventType=1";
+ //Private 
+ var privatecSql = "SELECT e.eventId,e.eventName,e.eventdate,e.eventTime,e.eventDescrip FROM uniEvents e where eventType=2";
+ 
+ var returnObject ={}
   var arrayOFEvents =[]
 
-  connection.query(trendSQL, function (err, result) {
+  connection.query(publicSql, function (err, result) {
     var results= JSON.parse(JSON.stringify(result))
     var dat ,time,eventTime=''
     results.forEach(element => {
@@ -98,57 +103,58 @@ app.get('/',(req,res)=>{
           year: 'numeric',
         });
         console.log(element.eventdate)
-         time= element.eventdate.split("T");
-        eventTime= time[1].replace('Z','')+ "(GMT)"
-    arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount })
+         time= element.eventTime;
+    arrayOFEvents.push({ "eventTitle": element.eventName,"eventDecrip":element.eventDescrip,"eventTime":time,"eventDate":dat })
 });
-returnObject["Popular"] = arrayOFEvents;
+returnObject["Public"] = arrayOFEvents;
+console.log(returnObject);
 arrayOFEvents =[]
+res.render('mainPlatform',{ lists:returnObject ,userName:req.query.user});
+
 });
 
-  connection.query(sql, function (err, result) {
-    var results= JSON.parse(JSON.stringify(result))
-    var curCat = result[0].categoryName
-    var dat ,time,eventTime=''
-    results.forEach(element => {
+//   connection.query(sql, function (err, result) {
+//     var results= JSON.parse(JSON.stringify(result))
+//     var curCat = result[0].categoryName
+//     var dat ,time,eventTime=''
+//     results.forEach(element => {
 
-      if(curCat == element.categoryName)
-      {
-        //NOTE SAVE DATE AS UTC
-         dat=element.eventdate;
-        dat =new Date(dat).toLocaleString('en', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-        });
-         time=new Date(dat).toLocaleTimeString();
-        eventTime= time
-        arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount  })
-        console.log( arrayOFEvents)
-      }
-      else
-      {
-        returnObject[curCat] = arrayOFEvents;
-        arrayOFEvents=[];
-         dat=element.eventdate;
-        dat =new Date(dat).toLocaleString('en', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-        });
-         time=new Date(dat).toLocaleTimeString();
-        eventTime= time
-arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount  })
-        curCat=element.categoryName;
-      }
+//       if(curCat == element.categoryName)
+//       {
+//         //NOTE SAVE DATE AS UTC
+//          dat=element.eventdate;
+//         dat =new Date(dat).toLocaleString('en', {
+//           month: 'long',
+//           day: 'numeric',
+//           year: 'numeric',
+//         });
+//          time=new Date(dat).toLocaleTimeString();
+//         eventTime= time
+//         arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount  })
+//         console.log( arrayOFEvents)
+//       }
+//       else
+//       {
+//         returnObject[curCat] = arrayOFEvents;
+//         arrayOFEvents=[];
+//          dat=element.eventdate;
+//         dat =new Date(dat).toLocaleString('en', {
+//           month: 'long',
+//           day: 'numeric',
+//           year: 'numeric',
+//         });
+//          time=new Date(dat).toLocaleTimeString();
+//         eventTime= time
+// arrayOFEvents.push({ "eventTitle": element.eventName, "eventImage":element.eventImageLink,"eventLink":element.eventLink,"eventDecrip":element.eventDescrip,"price":element.ticketPrice,"eventTime":eventTime,"eventDate":dat,"rate":element.ratingCount  })
+//         curCat=element.categoryName;
+//       }
     
-    });
+//     });
 
-    returnObject[curCat] = arrayOFEvents;
+//     returnObject[curCat] = arrayOFEvents;
+console.log(returnObject);
 
-    res.render('mainPlatform',{ lists:returnObject ,userName:req.query.user});
-
-  });
+  //});
 
 
 }) 
@@ -173,7 +179,7 @@ app.post('/signUpProcess',[
 
     
     var object = req.body;
-    var sql = "insert into users(firstname,lastname,email,userPassword,userType) Values ('"+object.firstNmeInput+"','"+object.lastNmeInput+"','"+object.emailInput+"','"+object.passwordInput+"',24)";
+    var sql = "insert into users(firstname,lastname,email,userPassword,userType) Values ('"+object.firstNmeInput+"','"+object.lastNmeInput+"','"+object.emailInput+"','"+object.passwordInput+"',3)";
     connection.query(sql, function (err, result) {
       if (err) throw err;
       res.redirect("/?user="+object.firstNmeInput +" "+ object.lastNmeInput);
