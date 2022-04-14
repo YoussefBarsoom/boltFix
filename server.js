@@ -79,7 +79,13 @@ app.post('/SignUp',(req,res)=>{
 app.get('/',(req,res)=>{
   if(req.query.user)
   {
+  var userSQL ="Select * from users where userID="+req.query.user;
+  connection.query(publicSql, function (err, result) {
+    var uniSQL ="Select uniID from studentinuniversity where studentID="+req.query.user;
   
+  
+  
+  });
   }
 
   //var trendSQL = "Select * from CREATOR_EVENT ORDER BY ratingCount DESC LIMIT 10;";
